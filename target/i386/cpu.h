@@ -1546,6 +1546,14 @@ typedef struct HVFX86LazyFlags {
     target_ulong auxbits;
 } HVFX86LazyFlags;
 
+typedef enum MemState {
+    START,
+    AFTER_LOAD,
+    AFTER_STORE,
+    AFTER_FENCE,
+} X86MemState;
+
+
 typedef struct CPUArchState {
     /* standard registers */
     target_ulong regs[CPU_NB_REGS];

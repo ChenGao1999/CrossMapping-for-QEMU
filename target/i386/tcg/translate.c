@@ -64,6 +64,8 @@
 
 //#define MACRO_TEST   1
 
+__thread X86MemState memState;
+
 /* global register indexes */
 static TCGv cpu_cc_dst, cpu_cc_src, cpu_cc_src2;
 static TCGv cpu_eip;
@@ -7080,6 +7082,6 @@ void gen_intermediate_code(CPUState *cpu, TranslationBlock *tb, int *max_insns,
                            target_ulong pc, void *host_pc)
 {
     DisasContext dc;
-
+    memState = START;
     translator_loop(cpu, tb, max_insns, pc, host_pc, &i386_tr_ops, &dc.base);
 }

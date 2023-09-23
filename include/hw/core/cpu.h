@@ -461,6 +461,8 @@ extern CPUTailQ cpus;
 
 extern __thread CPUState *current_cpu;
 
+extern __thread MemState memState;
+
 /**
  * qemu_tcg_mttcg_enabled:
  * Check whether we are running MultiThread TCG or not.
