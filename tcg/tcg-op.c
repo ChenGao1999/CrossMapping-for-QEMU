@@ -2924,15 +2924,19 @@ static void tcg_gen_req_mo(MemOpType motype)
         } else if (memState == AFTER_LOAD) {
             type = TCG_MO_LD_LD;
         // } else if (memState == AFTER_STORE) {
+        } else if (memState == AFTER_RMW) {
+            type = TCG_MO_ST_LD;
         }
         memState = AFTER_LOAD;
-    } else if (motype == STORE) {
+    } else {            // motype == STORE
         if (memState == START) {
             type = TCG_MO_LD_ST | TCG_MO_ST_ST;
         // } else if (memState == AFTER_FENCE) {
         } else if (memState == AFTER_LOAD) {
             type = TCG_MO_LD_ST;
         } else if (memState == AFTER_STORE) {
+            type = TCG_MO_ST_ST;
+        } else if (memState == AFTER_RMW) {
             type = TCG_MO_ST_ST;
         }
         memState = AFTER_STORE;
