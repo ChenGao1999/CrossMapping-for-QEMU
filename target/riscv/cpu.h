@@ -135,6 +135,14 @@ typedef struct PMUCTRState {
     target_ulong irq_overflow_left;
 } PMUCTRState;
 
+typedef enum MemState {
+    START,
+    AFTER_LOAD,
+    AFTER_STORE,
+    AFTER_FENCE,
+    AFTER_RMW,
+} RiscvMemState;
+
 struct CPUArchState {
     target_ulong gpr[32];
     target_ulong gprh[32]; /* 64 top bits of the 128-bit registers */

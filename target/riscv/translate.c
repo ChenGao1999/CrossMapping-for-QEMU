@@ -44,6 +44,8 @@ static TCGv pm_base;
 
 #include "exec/gen-icount.h"
 
+__thread RiscvMemState memState;
+
 /*
  * If an operation is being performed on less than TARGET_LONG_BITS,
  * it may require the inputs to be sign- or zero-extended; which will
@@ -1274,7 +1276,7 @@ void gen_intermediate_code(CPUState *cs, TranslationBlock *tb, int *max_insns,
                            target_ulong pc, void *host_pc)
 {
     DisasContext ctx;
-
+    // memState = START;
     translator_loop(cs, tb, max_insns, pc, host_pc, &riscv_tr_ops, &ctx.base);
 }
 
