@@ -1506,6 +1506,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
         gen_compute_eflags_c(s1, s1->tmp4);
         if (s1->prefix & PREFIX_LOCK) {
             tcg_gen_add_tl(s1->T0, s1->tmp4, s1->T1);
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
             if (memState == START) {
                 tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
             } else if (memState == AFTER_STORE) {
@@ -1513,6 +1514,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
             } else if (memState == AFTER_LOAD) {
                 tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
             }
+#endif
             tcg_gen_atomic_add_fetch_tl(s1->T0, s1->A0, s1->T0,
                                         s1->mem_index, ot | MO_LE);
             memState = AFTER_RMW;
@@ -1529,6 +1531,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
         if (s1->prefix & PREFIX_LOCK) {
             tcg_gen_add_tl(s1->T0, s1->T1, s1->tmp4);
             tcg_gen_neg_tl(s1->T0, s1->T0);
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
             if (memState == START) {
                 tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
             } else if (memState == AFTER_STORE) {
@@ -1536,6 +1539,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
             } else if (memState == AFTER_LOAD) {
                 tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
             }
+#endif
             tcg_gen_atomic_add_fetch_tl(s1->T0, s1->A0, s1->T0,
                                         s1->mem_index, ot | MO_LE);
             memState = AFTER_RMW;
@@ -1549,6 +1553,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
         break;
     case OP_ADDL:
         if (s1->prefix & PREFIX_LOCK) {
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
             if (memState == START) {
                 tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
             } else if (memState == AFTER_STORE) {
@@ -1556,6 +1561,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
             } else if (memState == AFTER_LOAD) {
                 tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
             }
+#endif
             tcg_gen_atomic_add_fetch_tl(s1->T0, s1->A0, s1->T1,
                                         s1->mem_index, ot | MO_LE);
             memState = AFTER_RMW;
@@ -1569,6 +1575,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
     case OP_SUBL:
         if (s1->prefix & PREFIX_LOCK) {
             tcg_gen_neg_tl(s1->T0, s1->T1);
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
             if (memState == START) {
                 tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
             } else if (memState == AFTER_STORE) {
@@ -1576,6 +1583,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
             } else if (memState == AFTER_LOAD) {
                 tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
             }
+#endif
             tcg_gen_atomic_fetch_add_tl(s1->cc_srcT, s1->A0, s1->T0,
                                         s1->mem_index, ot | MO_LE);
             memState = AFTER_RMW;
@@ -1591,6 +1599,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
     default:
     case OP_ANDL:
         if (s1->prefix & PREFIX_LOCK) {
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
             if (memState == START) {
                 tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
             } else if (memState == AFTER_STORE) {
@@ -1598,6 +1607,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
             } else if (memState == AFTER_LOAD) {
                 tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
             }
+#endif
             tcg_gen_atomic_and_fetch_tl(s1->T0, s1->A0, s1->T1,
                                         s1->mem_index, ot | MO_LE);
             memState = AFTER_RMW;
@@ -1610,6 +1620,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
         break;
     case OP_ORL:
         if (s1->prefix & PREFIX_LOCK) {
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
             if (memState == START) {
                 tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
             } else if (memState == AFTER_STORE) {
@@ -1617,6 +1628,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
             } else if (memState == AFTER_LOAD) {
                 tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
             }
+#endif
             tcg_gen_atomic_or_fetch_tl(s1->T0, s1->A0, s1->T1,
                                        s1->mem_index, ot | MO_LE);
             memState = AFTER_RMW;
@@ -1629,6 +1641,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
         break;
     case OP_XORL:
         if (s1->prefix & PREFIX_LOCK) {
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
             if (memState == START) {
                 tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
             } else if (memState == AFTER_STORE) {
@@ -1636,6 +1649,7 @@ static void gen_op(DisasContext *s1, int op, MemOp ot, int d)
             } else if (memState == AFTER_LOAD) {
                 tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
             }
+#endif
             tcg_gen_atomic_xor_fetch_tl(s1->T0, s1->A0, s1->T1,
                                         s1->mem_index, ot | MO_LE);
             memState = AFTER_RMW;
@@ -1665,6 +1679,7 @@ static void gen_inc(DisasContext *s1, MemOp ot, int d, int c)
             return;
         }
         tcg_gen_movi_tl(s1->T0, c > 0 ? 1 : -1);
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
         if (memState == START) {
             tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
         } else if (memState == AFTER_STORE) {
@@ -1672,6 +1687,7 @@ static void gen_inc(DisasContext *s1, MemOp ot, int d, int c)
         } else if (memState == AFTER_LOAD) {
             tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
         }
+#endif
         tcg_gen_atomic_add_fetch_tl(s1->T0, s1->A0, s1->T0,
                                     s1->mem_index, ot | MO_LE);
         memState = AFTER_RMW;
@@ -2873,6 +2889,9 @@ do_gen_eob_worker(DisasContext *s, bool inhibit, bool recheck_tf, bool jr)
         tcg_gen_exit_tb(NULL, 0);
     }
     s->base.is_jmp = DISAS_NORETURN;
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
+    tcg_gen_mb(TCG_MO_ST_LD | TCG_MO_ST_ST);
+#endif
 }
 
 static inline void
@@ -3055,6 +3074,7 @@ static void gen_cmpxchg8b(DisasContext *s, CPUX86State *env, int modrm)
 
     /* Only require atomic with LOCK; non-parallel handled in generator. */
     if (s->prefix & PREFIX_LOCK) {
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
         if (memState == START) {
             tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
         } else if (memState == AFTER_STORE) {
@@ -3062,6 +3082,7 @@ static void gen_cmpxchg8b(DisasContext *s, CPUX86State *env, int modrm)
         } else if (memState == AFTER_LOAD) {
             tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
         }
+#endif
         tcg_gen_atomic_cmpxchg_i64(old, s->A0, cmp, val, s->mem_index, MO_TEUQ);
         memState = AFTER_RMW;
     } else {
@@ -3115,6 +3136,7 @@ static void gen_cmpxchg16b(DisasContext *s, CPUX86State *env, int modrm)
 
     /* Only require atomic with LOCK; non-parallel handled in generator. */
     if (s->prefix & PREFIX_LOCK) {
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
         if (memState == START) {
             tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
         } else if (memState == AFTER_STORE) {
@@ -3122,6 +3144,7 @@ static void gen_cmpxchg16b(DisasContext *s, CPUX86State *env, int modrm)
         } else if (memState == AFTER_LOAD) {
             tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
         }
+#endif
         tcg_gen_atomic_cmpxchg_i128(val, s->A0, cmp, val, s->mem_index, mop);
         memState = AFTER_RMW;
     } else {
@@ -3460,6 +3483,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                     goto illegal_op;
                 }
                 tcg_gen_movi_tl(s->T0, ~0);
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
                 if (memState == START) {
                     tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
                 } else if (memState == AFTER_STORE) {
@@ -3467,6 +3491,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                 } else if (memState == AFTER_LOAD) {
                     tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
                 }
+#endif
                 tcg_gen_atomic_xor_fetch_tl(s->T0, s->A0, s->T0,
                                             s->mem_index, ot | MO_LE);
                 memState = AFTER_RMW;
@@ -3496,6 +3521,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                 t2 = tcg_temp_new();
                 tcg_gen_mov_tl(t2, t0);
                 tcg_gen_neg_tl(t1, t0);
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
                 if (memState == START) {
                     tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
                 } else if (memState == AFTER_STORE) {
@@ -3503,6 +3529,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                 } else if (memState == AFTER_LOAD) {
                     tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
                 }
+#endif
                 tcg_gen_atomic_cmpxchg_tl(t0, a0, t0, t1,
                                           s->mem_index, ot | MO_LE);
                 memState = AFTER_RMW;
@@ -3918,6 +3945,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
         } else {
             gen_lea_modrm(env, s, modrm);
             if (s->prefix & PREFIX_LOCK) {
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
                 if (memState == START) {
                     tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
                 } else if (memState == AFTER_STORE) {
@@ -3925,6 +3953,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                 } else if (memState == AFTER_LOAD) {
                     tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
                 }
+#endif
                 tcg_gen_atomic_fetch_add_tl(s->T1, s->A0, s->T0,
                                             s->mem_index, ot | MO_LE);
                 memState = AFTER_RMW;
@@ -3959,6 +3988,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                     goto illegal_op;
                 }
                 gen_lea_modrm(env, s, modrm);
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
                 if (memState == START) {
                     tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
                 } else if (memState == AFTER_STORE) {
@@ -3966,6 +3996,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                 } else if (memState == AFTER_LOAD) {
                     tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
                 }
+#endif
                 tcg_gen_atomic_cmpxchg_tl(oldv, s->A0, cmpv, newv,
                                           s->mem_index, ot | MO_LE);
                 memState = AFTER_RMW;
@@ -4345,6 +4376,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
             gen_lea_modrm(env, s, modrm);
             gen_op_mov_v_reg(s, ot, s->T0, reg);
             /* for xchg, lock is implicit */
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
             if (memState == START) {
                 tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
             } else if (memState == AFTER_STORE) {
@@ -4352,6 +4384,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
             } else if (memState == AFTER_LOAD) {
                 tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
             }
+#endif
             tcg_gen_atomic_xchg_tl(s->T1, s->A0, s->T0,
                                    s->mem_index, ot | MO_LE);
             memState = AFTER_RMW;
@@ -5475,6 +5508,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                 break;
             case 1: /* bts */
                 {
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
                 if (memState == START) {
                     tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
                 } else if (memState == AFTER_STORE) {
@@ -5482,6 +5516,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                 } else if (memState == AFTER_LOAD) {
                     tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
                 }
+#endif
                 tcg_gen_atomic_fetch_or_tl(s->T0, s->A0, s->tmp0,
                                            s->mem_index, ot | MO_LE);
                 memState = AFTER_RMW;
@@ -5490,6 +5525,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
             case 2: /* btr */
                 {
                 tcg_gen_not_tl(s->tmp0, s->tmp0);
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
                 if (memState == START) {
                     tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
                 } else if (memState == AFTER_STORE) {
@@ -5497,6 +5533,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                 } else if (memState == AFTER_LOAD) {
                     tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
                 }
+#endif
                 tcg_gen_atomic_fetch_and_tl(s->T0, s->A0, s->tmp0,
                                             s->mem_index, ot | MO_LE);
                 memState = AFTER_RMW;
@@ -5505,6 +5542,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
             default:
             case 3: /* btc */
                 {
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
                 if (memState == START) {
                     tcg_gen_mb(TCG_MO_ALL | TCG_BAR_SC);
                 } else if (memState == AFTER_STORE) {
@@ -5512,6 +5550,7 @@ static bool disas_insn(DisasContext *s, CPUState *cpu)
                 } else if (memState == AFTER_LOAD) {
                     tcg_gen_mb(TCG_MO_LD_LD | TCG_BAR_SC);
                 }
+#endif
                 tcg_gen_atomic_fetch_xor_tl(s->T0, s->A0, s->tmp0,
                                             s->mem_index, ot | MO_LE);
                 memState = AFTER_RMW;

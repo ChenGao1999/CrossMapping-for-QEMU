@@ -2917,7 +2917,7 @@ static void gen_ldst_i64(TCGOpcode opc, TCGv_i64 val, TCGv addr,
 static void tcg_gen_req_mo(MemOpType motype)
 {
     TCGBar type = 0x0;
-    #if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
+#if (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__arm__) || defined(__arm) || defined(__aarch64__))
     if (motype == LOAD) {
         if (memState == START) {
             type = TCG_MO_LD_LD | TCG_MO_ST_LD;
@@ -2942,17 +2942,38 @@ static void tcg_gen_req_mo(MemOpType motype)
         }
         memState = AFTER_STORE;
     }
-    #elif (defined(TARGET_AARCH64) || defined(TARGET_ARM) || defined(TARGET_RISCV) || defined(TARGET_RISCV32) || defined(TARGET_RISCV64)) && (defined(__i386__) || defined(__x86_64__))
+#elif (defined(TARGET_I386) || defined(TARGET_X86_64)) && (defined(__riscv))
+    if (motype == LOAD) {
+        if (memState == START) {
+            type = TCG_MO_LD_LD | TCG_MO_ST_LD;
+        // } else if (memState == AFTER_FENCE) {
+        } else if (memState == AFTER_LOAD) {
+            type = TCG_MO_LD_LD;
+        // } else if (memState == AFTER_STORE) {
+        }
+        memState = AFTER_LOAD;
+    } else {            // motype == STORE
+        if (memState == START) {
+            type = TCG_MO_LD_ST | TCG_MO_ST_ST;
+        // } else if (memState == AFTER_FENCE) {
+        } else if (memState == AFTER_LOAD) {
+            type = TCG_MO_LD_ST;
+        } else if (memState == AFTER_STORE) {
+            type = TCG_MO_ST_ST;
+        }
+        memState = AFTER_STORE;
+    }
+#elif (defined(TARGET_AARCH64) || defined(TARGET_ARM) || defined(TARGET_RISCV) || defined(TARGET_RISCV32) || defined(TARGET_RISCV64)) && (defined(__i386) || defined(__i386__) || defined(__x86_64) || defined(__x86_64__))
 
     // memState = START;
 
-    #else
+#else
     if (motype == LOAD) { 
         type = TCG_MO_LD_LD | TCG_MO_ST_LD;
     } else {
         type = TCG_MO_LD_ST | TCG_MO_ST_ST;
     }
-    #endif
+#endif
 
 
 #ifdef TCG_GUEST_DEFAULT_MO
